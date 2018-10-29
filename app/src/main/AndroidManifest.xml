@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.ruan.carteiradeclientes">
 
@@ -7,7 +8,25 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".ActMain"
+            android:label="@string/title_activity_act_main"
+            android:theme="@style/AppTheme.NoActionBar"> <!-- Esta tag está registrando o Activity -->
+            <!--
+                android:name => define o nome da classe que representa este Activity
+                android:label => define o nome (label) do Activity
+                android:theme => define o estilo para o Activity
+             -->
+            <intent-filter> <!-- Define um intent-filter para esta Activity -->
+                <action android:name="android.intent.action.MAIN" /> <!-- Define no intent que
+                este Activity será o principal. OBS:Não pode existir mais de uma Activity com
+                  esta seção Main -->
 
+                <category android:name="android.intent.category.LAUNCHER" /> <!-- Define no intent
+                 que este Activity será executado -->
+            </intent-filter>
+        </activity>
     </application>
+
 </manifest>
