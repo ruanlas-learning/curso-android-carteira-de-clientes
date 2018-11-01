@@ -17,16 +17,26 @@
                 android:name => define o nome da classe que representa este Activity
                 android:label => define o nome (label) do Activity
                 android:theme => define o estilo para o Activity
-             -->
+            -->
             <intent-filter> <!-- Define um intent-filter para esta Activity -->
-                <action android:name="android.intent.action.MAIN" /> <!-- Define no intent que
+                <action android:name="android.intent.action.MAIN" />
+                <!--
+      Define no intent que
                 este Activity será o principal. OBS:Não pode existir mais de uma Activity com
-                  esta seção Main -->
+                  esta seção Main
+                -->
 
-                <category android:name="android.intent.category.LAUNCHER" /> <!-- Define no intent
-                 que este Activity será executado -->
+                <category android:name="android.intent.category.LAUNCHER" />
+                <!--
+      Define no intent
+                 que este Activity será executado
+                -->
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ActCadCliente"
+            android:label="@string/title_activity_act_cad_cliente"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
