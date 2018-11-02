@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_ok"
+        android:title="@string/title_menu_ok"
+        android:orderInCategory="1"
+        app:showAsAction="ifRoom" />
+    <!-- a propriedade 'android:orderInCategory' define a prioridade (sequência) de exibição -->
+    <!-- a propriedade 'app:showAsAction' define como os itens de menu se comportarão na janela.
+                * o valor 'never' indica que o item será visível em uma lista de itens
+                        de menu (aparecerá apenas se for clicado no menu)
+                * o valor 'ifRoom' indica que o item aparecerá visível no toolbar se houver espaço,
+                        seguindo a ordem de exibição (orderInCategory)
+                * o valor 'always' indica que o item sempre aparecerá visível no toolbar
+                * o valor 'withText' indica que o item de menu aparecerá também com um texto
+                        (caso o item possua uma imagem e um texto referenciado)
+                * o valor 'collapseActionView' é para adicionar um outro componente, como um de
+                        pesquisa (Search Item), para seu toolbar. Ao adicionar um 'Search Item',
+                        por exemplo, ele adiciona um componente na propiedade 'actionViewClass'
+                        por padrão, responsável por realizar pesquisa através do toolbar, abrindo
+                        um campo de pesquisa para o usuário poder digitar algum valor que esteja
+                        procurando. Quando se utiliza este componente em um item de menu,
+                        utiliza-se esta propiedade, e a propiedade 'showAsAction' recebe o valor
+                        'collapseActionView' .
+                        -->
+    <item
+        android:id="@+id/action_cancelar"
+        android:title="@string/title_menu_cancelar"
+        android:orderInCategory="2"
+        app:showAsAction="ifRoom" />
+</menu>
