@@ -76,7 +76,7 @@ public class ActMain extends AppCompatActivity { // O 'AppCompatActivity' é uma
             AlertDialog.Builder dlg = new AlertDialog.Builder(this);
             dlg.setTitle(R.string.title_erro);
             dlg.setMessage(e.getMessage());
-            dlg.setNeutralButton(R.string.lbl_ok, null);
+            dlg.setNeutralButton(R.string.action_ok, null);
             dlg.show();
         }
 
