@@ -1,10 +1,12 @@
 package com.example.ruan.carteiradeclientes.dominio.repositorio;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.ruan.carteiradeclientes.dominio.entidade.Cliente;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClienteRepositorio {
@@ -66,10 +68,98 @@ public class ClienteRepositorio {
 
     public List<Cliente> buscarTodos(){
 
-        return null;
+        List<Cliente> clienteList = new ArrayList<Cliente>();
+
+        StringBuilder sql = new StringBuilder();
+
+        sql.append("SELECT codigo, nome, endereco, email, telefone ");
+        sql.append("    FROM cliente");
+
+        /*
+        * o método 'rawQuery' permite fazer uma consulta utilizando um script SQL. Este método
+        * espera dois parâmetros:
+        * 1º parâmetro => uma string contendo um script SQL
+        * 2º parâmetro => um array de string contendo parâmetros de query [ caso seja criado
+        * parâmetros de query no script SQL ]
+        * */
+
+        Cursor resultado = conexao.rawQuery(sql.toString(), null);
+
+        if (resultado.getCount() > 0){
+            resultado.moveToFirst();
+
+            do {
+                Cliente cliente = new Cliente();
+                cliente.codigo = resultado.getInt( //este método obtém o resultado da coluna
+                                            // através de seu índice. O índice da coluna é a
+                                            // sequência dos campos passada na query
+                        resultado.getColumnIndexOrThrow("codigo") //este método recupera
+                                    // o índice da coluna através do nome da coluna
+                );
+                cliente.email = resultado.getString(
+                        resultado.getColumnIndexOrThrow("email")
+                );
+                cliente.telefone = resultado.getString(
+                        resultado.getColumnIndexOrThrow("telefone")
+                );
+                cliente.endereco = resultado.getString(
+                        resultado.getColumnIndexOrThrow("endereco")
+                );
+                cliente.nome = resultado.getString(
+                        resultado.getColumnIndexOrThrow("nome")
+                );
+
+                clienteList.add(cliente);
+
+            }while (resultado.moveToNext());
+        }
+        if (resultado != null && !resultado.isClosed()){
+            resultado.close();
+        }
+
+        return clienteList;
     }
 
     public Cliente buscarCliente(int codigo){
-        return null;
+
+        Cliente cliente = null;
+
+        StringBuilder sql = new StringBuilder();
+
+        sql.append("SELECT codigo, nome, endereco, email, telefone ");
+        sql.append("    FROM cliente");
+        sql.append(" WHERE codigo = ? ");
+
+        String[] parametros = new String[1];
+        parametros[0] = String.valueOf(codigo);
+
+        Cursor resultado = conexao.rawQuery(sql.toString(), parametros);
+
+        if (resultado.getCount() > 0 ){
+            resultado.moveToFirst();
+
+            cliente = new Cliente();
+            cliente.codigo = resultado.getInt(
+                    resultado.getColumnIndexOrThrow("codigo")
+            );
+            cliente.email = resultado.getString(
+                    resultado.getColumnIndexOrThrow("email")
+            );
+            cliente.telefone = resultado.getString(
+                    resultado.getColumnIndexOrThrow("telefone")
+            );
+            cliente.endereco = resultado.getString(
+                    resultado.getColumnIndexOrThrow("endereco")
+            );
+            cliente.nome = resultado.getString(
+                    resultado.getColumnIndexOrThrow("nome")
+            );
+        }
+
+        if (resultado != null && !resultado.isClosed()){
+            resultado.close();
+        }
+
+        return cliente;
     }
 }
