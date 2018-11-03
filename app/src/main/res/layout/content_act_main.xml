@@ -16,15 +16,18 @@
         android:id="@+id/lstDados"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <!--
+        Temos que considerar a margem do RecycleView ao criar as margens da 'linha_clientes.xml'.
+        As margens esquerda e direita da 'linha_clientes.xml'. estão com 16dp. Caso exista alguma
+        margem no RecycleView, esta margem será adicionada ao componente criado em 'linha_clientes.xml'.
+        Para isto não ocorrer, devemos reduzir a margem esquerda e direita do RecycleView para 0
+     -->
 
 </android.support.constraint.ConstraintLayout>
