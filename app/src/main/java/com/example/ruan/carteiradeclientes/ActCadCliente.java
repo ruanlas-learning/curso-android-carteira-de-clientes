@@ -1,6 +1,9 @@
 package com.example.ruan.carteiradeclientes;
 
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -15,10 +18,21 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.ruan.carteiradeclientes.database.DadosOpenHelper;
+import com.example.ruan.carteiradeclientes.dominio.entidade.Cliente;
+import com.example.ruan.carteiradeclientes.dominio.repositorio.ClienteRepositorio;
+
 public class ActCadCliente extends AppCompatActivity {
 
 //    private FloatingActionButton fab;
     private EditText edtNome, edtEndereco, edtTelefone, edtEmail;
+    private ConstraintLayout layoutContentActCadCliente;
+
+    private ClienteRepositorio clienteRepositorio;
+
+    private DadosOpenHelper dadosOpenHelper;
+
+    private SQLiteDatabase conexao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +45,7 @@ public class ActCadCliente extends AppCompatActivity {
         edtEndereco = (EditText)findViewById(R.id.edtEndereco);
         edtTelefone = (EditText)findViewById(R.id.edtTelefone);
         edtEmail = (EditText)findViewById(R.id.edtEmail);
+        layoutContentActCadCliente = (ConstraintLayout)findViewById(R.id.layoutContentActCadCliente);
 
 //        fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -40,6 +55,34 @@ public class ActCadCliente extends AppCompatActivity {
 //                        .setAction("Action", null).show();
 //            }
 //        });
+
+        criarConexao();
+        clienteRepositorio = new ClienteRepositorio(conexao);
+    }
+
+    private void criarConexao(){
+
+        try {
+
+            dadosOpenHelper = new DadosOpenHelper(this);
+            conexao = dadosOpenHelper.getWritableDatabase(); //Obtém a conexão com o banco de dados
+            // para escrita/leitura
+
+            // O primeiro parâmetro do Snackbar espera-se um objeto do tipo View. Como alternativa,
+            // pode-se passar o layout desta Activity localizado no arquivo 'content_act_main.xml'
+            Snackbar.make(layoutContentActCadCliente, R.string.message_conexao_criada_com_sucesso, Snackbar.LENGTH_LONG)
+                    .setAction(R.string.lbl_ok, null).show(); // o primeiro parâmetro do
+            // setAction define o nome do botão que aparecerá para ser clicado, e o segundo
+            // parâmetro define a ação que este botão terá
+
+        }catch (SQLException e){
+            AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+            dlg.setTitle(R.string.title_erro);
+            dlg.setMessage(e.getMessage());
+            dlg.setNeutralButton(R.string.action_ok, null);
+            dlg.show();
+        }
+
     }
 
     @Override
@@ -54,7 +97,31 @@ public class ActCadCliente extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    private void validaCampos(){
+    private void confirmar(){
+
+        if (validaCampos()){
+            Cliente cliente = new Cliente();
+
+            cliente.nome = edtNome.getText().toString();
+            cliente.endereco = edtEndereco.getText().toString();
+            cliente.email = edtEmail.getText().toString();
+            cliente.telefone = edtTelefone.getText().toString();
+
+            try {
+                clienteRepositorio.inserir(cliente);
+
+                finish();
+            }catch (SQLException e){
+                AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+                dlg.setTitle(R.string.title_erro);
+                dlg.setMessage(e.getMessage());
+                dlg.setNeutralButton(R.string.action_ok, null);
+                dlg.show();
+            }
+        }
+    }
+
+    private boolean validaCampos(){
         String nome, endereco, email, telefone;
         nome = edtNome.getText().toString();
         endereco = edtEndereco.getText().toString();
@@ -80,6 +147,8 @@ public class ActCadCliente extends AppCompatActivity {
             dlg.setNeutralButton(R.string.action_ok, null);
             dlg.show();
         }
+
+        return !campoInvalido;
     }
 
     private boolean isCampoVazio(String valor){
@@ -104,7 +173,8 @@ public class ActCadCliente extends AppCompatActivity {
 
         switch (itemId){
             case R.id.action_ok:
-                validaCampos();
+                confirmar();
+//                validaCampos();
 //                Toast.makeText(this, "Botão OK selecionado 'id:" + itemId, Toast.LENGTH_SHORT).show();
                 break;
             case R.id.action_cancelar:
