@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -106,7 +107,37 @@ public class ActMain extends AppCompatActivity { // O 'AppCompatActivity' é uma
 
     public void cadastrar(View view){
         Intent intent = new Intent(ActMain.this, ActCadCliente.class);
-        startActivity(intent);
+//        startActivity(intent);
+
+        startActivityForResult(intent, 0); // Este método também irá chamar o Activity ActCadCliente.
+        // Entretanto, sua diferença para o startActivity é que ele espera um retorno do activity
+        // que foi chamado. Desta forma, assim que ele finalizar, ele dará um retorno para o
+        // Activiry que chamou (este), e assim, poderemos atualizar o cadastro de forma automática
+        /*
+        * Este método espera dois parâmetros:
+        * 1º uma referência da Classe Intent
+        * 2º um código de retorno (requestCode). Este código será utilizado para identificar quando
+        * a Activity que foi chamada for fechada. Se houver várias janelas, é interessante que haja
+        * um código para cada janela. Este código será utilizado como retorno para a minha chamada
+        * para identificar qual janela que foi chamada no sistema
+        * */
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+        // Neste método que ocorrerá a atualização da listagem dos clientes. O parâmetro requestCode
+        // é o mesmo código de retorno passado pelo startActivityForResult. O resultCode é o código
+        // que vai ser passado pelo Activity que foi chamado (caso seja necessário). O parâmetro
+        // data é uma referência da classe Intent caso seja passado algum parâmetro que virá da
+        // classe que foi chamada
+
+
+        if (requestCode == 0){
+            //Este trecho atualizará a listagem de clientes quando a tela de cadasro for fechada
+            List<Cliente> clienteList = clienteRepositorio.buscarTodos();
+            clienteAdapter = new ClienteAdapter(clienteList);
+            lstDados.setAdapter(clienteAdapter);
+        }
+    }
 }
