@@ -9,11 +9,16 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.example.ruan.carteiradeclientes.database.DadosOpenHelper;
+import com.example.ruan.carteiradeclientes.dominio.entidade.Cliente;
+import com.example.ruan.carteiradeclientes.dominio.repositorio.ClienteRepositorio;
+
+import java.util.List;
 
 public class ActMain extends AppCompatActivity { // O 'AppCompatActivity' é uma classe utilizada
     // para dar suporte a recursos que somente tem em aplicações mais novas
@@ -24,6 +29,10 @@ public class ActMain extends AppCompatActivity { // O 'AppCompatActivity' é uma
 
     private SQLiteDatabase conexao;
     private DadosOpenHelper dadosOpenHelper;
+
+    private ClienteAdapter clienteAdapter;
+
+    private ClienteRepositorio clienteRepositorio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +64,19 @@ public class ActMain extends AppCompatActivity { // O 'AppCompatActivity' é uma
         layoutContentMain = (ConstraintLayout)findViewById(R.id.layoutContentMain);
 
         criarConexao();
+
+        lstDados.setHasFixedSize(true); // Faz com que o componente recycleView utilize o tamanho
+        // dos dados dentro do componente
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);//Esta classe
+        // que vai definir como os dados serão exibidos. Neste caso, serão exibidos em linha
+        lstDados.setLayoutManager(linearLayoutManager);
+
+        clienteRepositorio = new ClienteRepositorio(conexao);
+        List<Cliente> clienteList = clienteRepositorio.buscarTodos();
+
+        clienteAdapter = new ClienteAdapter(clienteList);
+        lstDados.setAdapter(clienteAdapter); //Estamos vinculando o adapter ao RecycleView lstDados
     }
 
     private void criarConexao(){
