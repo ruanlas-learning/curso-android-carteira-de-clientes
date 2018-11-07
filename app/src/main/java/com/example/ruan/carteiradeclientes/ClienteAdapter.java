@@ -1,6 +1,9 @@
 package com.example.ruan.carteiradeclientes;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,7 +55,7 @@ public class ClienteAdapter extends RecyclerView.Adapter<ClienteAdapter.ViewHold
         * 3º => valor booleano. 'false' se deseja-se que a classe Adapter vincule-se automaticamente
         * à nossa view o nosso layout ao nosso recycleView
         * */
-        ViewHolderCliente viewHolderCliente = new ViewHolderCliente(view);
+        ViewHolderCliente viewHolderCliente = new ViewHolderCliente(view, viewGroup.getContext());
         return viewHolderCliente;
     }
 
@@ -85,11 +88,28 @@ public class ClienteAdapter extends RecyclerView.Adapter<ClienteAdapter.ViewHold
 
         public TextView txtLinhaNomeCliente, txtLinhaTelefoneCliente;
 
-        public ViewHolderCliente(@NonNull View itemView) {
+        public ViewHolderCliente(@NonNull View itemView, final Context context) {
             super(itemView);
 
             txtLinhaNomeCliente = (TextView) itemView.findViewById(R.id.txtLinhaNomeCliente);
             txtLinhaTelefoneCliente = (TextView) itemView.findViewById(R.id.txtLinhaTelefoneCliente);
+
+            // Abaixo está sendo criado um evento de clique para a linha
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // para poder utilizar o objeto context dentro desta classe anônima,
+                    // ele deve ser declarado como final
+                    Intent intent = new Intent(context, ActCadCliente.class);
+                    // para chamar outra Activity, utilizando o método startActivityForResult
+                    // deve-se fazer um 'cast' no objeto context para AppCompatActivity
+                    // O parâmetro 0 do requestCode se refere ao padrão adotado ao chamar a tela
+                    // ActCadCliente, para garantir que o método onActivityResult seja executado
+                    // para atualizar a listagem
+                    ((AppCompatActivity)context).startActivityForResult(intent, 0);
+
+                }
+            });
 
         }
     }
