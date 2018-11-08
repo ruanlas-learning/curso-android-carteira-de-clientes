@@ -12,4 +12,9 @@ public class Cliente implements Serializable {
     public String email;
     public String telefone;
 
+    public Cliente(){
+        // Ao criar um objeto novo, o código padrão é 0.
+        // Quando um objeto já existir, o código assumirá outro valor diferente de 0
+        codigo = 0;
+    }
 }

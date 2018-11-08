@@ -34,6 +34,8 @@ public class ActCadCliente extends AppCompatActivity {
 
     private SQLiteDatabase conexao;
 
+    private Cliente cliente;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,12 +75,16 @@ public class ActCadCliente extends AppCompatActivity {
             // Abaixo está sendo recuperado o parâmetro cliente que foi passado pela outra activity.
             // Como a classe Cliente implementa a interface Serializable, podemos utilizar este
             // método getSerializable, e depois faz-se um cast para a classe Cliente
-            Cliente cliente = (Cliente) bundle.getSerializable("cliente");
+//            Cliente cliente = (Cliente) bundle.getSerializable("cliente");
+            cliente = (Cliente) bundle.getSerializable("cliente");
 
             edtNome.setText(cliente.nome);
             edtTelefone.setText(cliente.telefone);
             edtEndereco.setText(cliente.endereco);
             edtEmail.setText(cliente.email);
+        }else {
+            // Se não for passado o parâmetro cliente, o objeto cliente é inicializado por padrão
+            cliente = new Cliente();
         }
     }
 
@@ -122,7 +128,8 @@ public class ActCadCliente extends AppCompatActivity {
     private void confirmar(){
 
         if (validaCampos()){
-            Cliente cliente = new Cliente();
+//            Cliente cliente = new Cliente();
+//            cliente = new Cliente();
 
             cliente.nome = edtNome.getText().toString();
             cliente.endereco = edtEndereco.getText().toString();
@@ -130,7 +137,11 @@ public class ActCadCliente extends AppCompatActivity {
             cliente.telefone = edtTelefone.getText().toString();
 
             try {
-                clienteRepositorio.inserir(cliente);
+                if (cliente.codigo == 0){
+                    clienteRepositorio.inserir(cliente);
+                }else {
+                    clienteRepositorio.alterar(cliente);
+                }
 
                 finish();
             }catch (SQLException e){
