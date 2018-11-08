@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ruan.carteiradeclientes.dominio.entidade.Cliente;
 
@@ -98,15 +99,29 @@ public class ClienteAdapter extends RecyclerView.Adapter<ClienteAdapter.ViewHold
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // para poder utilizar o objeto context dentro desta classe anônima,
-                    // ele deve ser declarado como final
-                    Intent intent = new Intent(context, ActCadCliente.class);
-                    // para chamar outra Activity, utilizando o método startActivityForResult
-                    // deve-se fazer um 'cast' no objeto context para AppCompatActivity
-                    // O parâmetro 0 do requestCode se refere ao padrão adotado ao chamar a tela
-                    // ActCadCliente, para garantir que o método onActivityResult seja executado
-                    // para atualizar a listagem
-                    ((AppCompatActivity)context).startActivityForResult(intent, 0);
+                    // verifica se existe registros
+                    if (dados.size() > 0){
+
+                        int itemSelecionado = getLayoutPosition(); //retorna a posição do item que
+                        // foi selecionado no recycleView, que será a mesma posição na lista de dados
+                        Cliente cliente = dados.get(itemSelecionado);// retorna o objeto contido na
+                        // posição selecionada
+//                        Toast.makeText(context, "Cliente: " + cliente.nome, Toast.LENGTH_LONG).show();
+
+                        // para poder utilizar o objeto context dentro desta classe anônima,
+                        // ele deve ser declarado como final
+                        Intent intent = new Intent(context, ActCadCliente.class);
+
+                        intent.putExtra("cliente", cliente); // o método putExtra serve para
+                        // passar parâmetros para a outra activity que está sendo chamada
+
+                        // para chamar outra Activity, utilizando o método startActivityForResult
+                        // deve-se fazer um 'cast' no objeto context para AppCompatActivity
+                        // O parâmetro 0 do requestCode se refere ao padrão adotado ao chamar a tela
+                        // ActCadCliente, para garantir que o método onActivityResult seja executado
+                        // para atualizar a listagem
+                        ((AppCompatActivity)context).startActivityForResult(intent, 0);
+                    }
 
                 }
             });

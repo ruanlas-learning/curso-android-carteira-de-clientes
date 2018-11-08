@@ -58,6 +58,28 @@ public class ActCadCliente extends AppCompatActivity {
 
         criarConexao();
         clienteRepositorio = new ClienteRepositorio(conexao);
+        verificaParametroPassado();
+    }
+
+    private void verificaParametroPassado(){
+
+        // Esta classe Bundle que irá conter os parâmetros que foram passados da outra activity
+        // para esta activity. O método getIntent().getExtras() recupera os parâmetros
+        // (se existirem) que foram passados
+        Bundle bundle = getIntent().getExtras();
+
+        // Está verificando se o bundle é nulo, e se contêm o parâmetro chamado cliente
+        if ( (bundle != null) && (bundle.containsKey("cliente")) ){
+            // Abaixo está sendo recuperado o parâmetro cliente que foi passado pela outra activity.
+            // Como a classe Cliente implementa a interface Serializable, podemos utilizar este
+            // método getSerializable, e depois faz-se um cast para a classe Cliente
+            Cliente cliente = (Cliente) bundle.getSerializable("cliente");
+
+            edtNome.setText(cliente.nome);
+            edtTelefone.setText(cliente.telefone);
+            edtEndereco.setText(cliente.endereco);
+            edtEmail.setText(cliente.email);
+        }
     }
 
     private void criarConexao(){
