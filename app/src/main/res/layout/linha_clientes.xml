@@ -2,7 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:foreground="?attr/selectableItemBackground"
     android:orientation="vertical">
+
+    <!--
+        a propiedade 'foreground' do gerenciador de layout permite definir o efeito de seleção,
+      quando uma linha é clicada. Para isto, utilizaremos esta propiedade com o valor
+       '?attr/selectableItemBackground' .
+       Desta forma, ficará assim => android:foreground="?attr/selectableItemBackground"
+
+       -->
 
     <TextView
         android:id="@+id/txtLinhaNomeCliente"

@@ -42,6 +42,10 @@ public class ActCadCliente extends AppCompatActivity {
         setContentView(R.layout.act_cad_cliente);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        // Este método abaixo permite adicionar na view a seta de navegação que volta para a
+        // tela que chamou esta Activity (botão voltar). É necessário implementar sua ação no
+        // método 'onOptionsItemSelected' para que o botão funcione
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         edtNome = (EditText)findViewById(R.id.edtNome);
         edtEndereco = (EditText)findViewById(R.id.edtEndereco);
@@ -205,13 +209,21 @@ public class ActCadCliente extends AppCompatActivity {
         int itemId = item.getItemId(); //recupera o id do item do menu clicado
 
         switch (itemId){
+
+            case android.R.id.home:
+                // Esta constante irá representar a seta de navegação (botão voltar) que adicionamos
+                // no método 'onCreate' utilizando a chamada
+                // 'getSupportActionBar().setDisplayHomeAsUpEnabled(true);'
+                finish();
+                break;
             case R.id.action_ok:
                 confirmar();
 //                validaCampos();
 //                Toast.makeText(this, "Botão OK selecionado 'id:" + itemId, Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.action_cancelar:
+            case R.id.action_excluir:
 //                Toast.makeText(this, "Botão Cancelar selecionado 'id:" + itemId, Toast.LENGTH_SHORT).show();
+                clienteRepositorio.excluir(cliente);
                 finish();
                 break;
         }
